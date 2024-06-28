@@ -1,0 +1,43 @@
+{
+  "entity": "eagle",
+  "modules": [
+    {
+      "module": "chrome",
+      "dependencies": [
+        {"url": "https://path/to/resource-v1.2.8.exe", "target": "resource.exe", "hash": "a193d"},
+        {"url": "https://path/to/other-resource-v3.4.1.msi", "target": "other-resource.msi", "hash": "11e32"}
+      ],
+      "parameters": {
+        "dark-mode": true,
+        "installation-path": "C:\\Program Files (x86)\\Google Chrome"
+      },
+      "configuration-files": {
+        "background": "chrome/background.jpeg",
+        "auto-tabs": "chrome/auto-tabs.yaml"
+      }
+    },
+    {
+      "module": "mission-planner",
+      "dependencies": [
+        {"url": "https://path/to/MissionPlanner-v1.3.74.msi", "target": "MIssionPlanner.msi", "hash": "df892"}
+      ],
+      "parameters": {
+        "installation-path": "C:\\Program Files (x86)\\Mission Planner"
+      },
+      "configuration-files": {
+        "config-xml": "mission-planner/config.xml"
+      }
+    },
+    {
+      "module": "logs-shortcut",
+      "dependencies": [],
+      "parameters": {
+        "log-paths": [
+          "C:\\AppData\\Google Chrome\\Logs",
+          "C:\\AppData\\Google Chrome\\Experimental\\Light Rendering\\Logs"
+        ]
+      },
+      "configuration-files": null
+    }
+  ]
+}
