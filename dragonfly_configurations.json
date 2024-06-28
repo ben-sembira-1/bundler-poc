@@ -1,0 +1,30 @@
+{
+  "entity": "dragonfly",
+  "modules": {
+    "mission_planner": {
+      "dependencies": [
+        {"url": "https://path/to/MissionPlanner-v1.3.74.msi", "target": "MIssionPlanner.msi", "hash": "df892"}
+      ],
+      "parameters": {
+        "installation_path": "C:\\Program Files (x86)\\Mission Planner"
+      },
+      "configuration_files": {
+        "config_xml": "mission-planner/config.xml"
+      }
+    },
+    "neptune": {
+      "dependencies": [
+        {"url": "https://path/to/neptune-v2.4.5.tar", "target": "neptune.tar", "hash": "24eab"}
+      ]
+    },
+    "logs_shortcuts": {
+      "module": "logs-shortcut",
+      "dependencies": [],
+      "parameters": {
+        "log_paths": [
+          "C:\\AppData\\Neptune\\Insights"
+        ]
+      }
+    }
+  }
+}

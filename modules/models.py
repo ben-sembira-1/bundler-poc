@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import List, Literal
+from typing import List
 from pydantic import BaseModel
 
 
@@ -11,6 +11,9 @@ class Dependency(BaseModel):
 
 class Module(BaseModel):
     dependencies: List[Dependency]
+
+    def name(self) -> str:
+        return self.__class__.__name__
 
 
 class Chrome(Module):
@@ -37,6 +40,10 @@ class MissionPlanner(Module):
     configuration_files: ConfigurationFiles
 
 
+class Neptune(Module):
+    pass
+
+
 class LogsShortcuts(BaseModel):
     class Parameters(BaseModel):
         log_paths: List[Path]
@@ -44,13 +51,4 @@ class LogsShortcuts(BaseModel):
     parameters: Parameters
 
 
-class EagleModules(BaseModel):
-    chrome: Chrome
-    mission_planner: MissionPlanner
-    logs_shortcuts: LogsShortcuts
-
-
-class EagleConfiguration(BaseModel):
-    entity: Literal["eagle"]
-    modules: EagleModules
 
