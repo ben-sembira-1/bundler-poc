@@ -1,43 +1,40 @@
 {
   "entity": "eagle",
-  "modules": [
-    {
-      "module": "chrome",
+  "modules": {
+    "chrome": {
       "dependencies": [
         {"url": "https://path/to/resource-v1.2.8.exe", "target": "resource.exe", "hash": "a193d"},
         {"url": "https://path/to/other-resource-v3.4.1.msi", "target": "other-resource.msi", "hash": "11e32"}
       ],
       "parameters": {
-        "dark-mode": true,
-        "installation-path": "C:\\Program Files (x86)\\Google Chrome"
+        "dark_mode": true,
+        "installation_path": "C:\\Program Files (x86)\\Google Chrome"
       },
-      "configuration-files": {
-        "background": "chrome/background.jpeg",
-        "auto-tabs": "chrome/auto-tabs.yaml"
+      "configuration_files": {
+        "background_image": "chrome/background.jpeg",
+        "auto_tabs": "chrome/auto-tabs.yaml"
       }
     },
-    {
-      "module": "mission-planner",
+    "mission_planner": {
       "dependencies": [
         {"url": "https://path/to/MissionPlanner-v1.3.74.msi", "target": "MIssionPlanner.msi", "hash": "df892"}
       ],
       "parameters": {
-        "installation-path": "C:\\Program Files (x86)\\Mission Planner"
+        "installation_path": "C:\\Program Files (x86)\\Mission Planner"
       },
-      "configuration-files": {
-        "config-xml": "mission-planner/config.xml"
+      "configuration_files": {
+        "config_xml": "mission-planner/config.xml"
       }
     },
-    {
+    "logs_shortcuts": {
       "module": "logs-shortcut",
       "dependencies": [],
       "parameters": {
-        "log-paths": [
+        "log_paths": [
           "C:\\AppData\\Google Chrome\\Logs",
           "C:\\AppData\\Google Chrome\\Experimental\\Light Rendering\\Logs"
         ]
-      },
-      "configuration-files": null
+      }
     }
-  ]
+  }
 }
