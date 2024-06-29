@@ -1,6 +1,6 @@
 from pathlib import Path
 import json
-from typing import List, Literal
+from typing import Callable, List, Literal
 
 from pydantic import BaseModel
 from modules.models import ModulesAvailable
@@ -11,24 +11,29 @@ class BundleConfiguration(BaseModel):
     modules: List[ModulesAvailable]
 
 
-def main(entity: Literal['dragonfly', 'eagle']):
+def cli_stage_decoration(function: Callable):
+    def run_function_with_cli_decoration(*args, **kwargs):
+        print("\n----------------------")
+        function(*args, **kwargs)
+        print("----------------------")
+
+    return run_function_with_cli_decoration
+
+
+@cli_stage_decoration
+def pack_module(module: ModulesAvailable, configuration_files_path: Path):
+    print(
+        f"Packing module {module.name} using {configuration_files_path}"
+    )
+
+
+def main(entity: Literal["dragonfly", "eagle"]):
     json_raw = Path(f"{entity}_configurations.json").read_text()
     model = BundleConfiguration(**json.loads(json_raw))
-    print(model)
-    print("----------------------")
-    print(model.modules)
-    print("----------------------")
     configuration_files_path = Path("entities/") / model.entity
-    print(configuration_files_path)
-    print("----------------------")
-    # for module in model.modules:
-    #     print(f"==={module.name}===")
-    #     print(f"{module.configuration_files}")
-    #     breakpoint()
-    print("----------------------")
-    print("----------------------")
-    print("----------------------")
+    for module in model.modules:
+        pack_module(module, configuration_files_path / module.name)
 
 
 if __name__ == "__main__":
-    main('dragonfly')
+    main("dragonfly")
