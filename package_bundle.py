@@ -1,13 +1,16 @@
 from pathlib import Path
 import json
-from typing import Callable, List, Literal
+from typing import Callable, List, Literal, TypeGuard
 
 from pydantic import BaseModel
 from modules import ModulesAvailable
 
 
+Entity = Literal["eagle", "dragonfly"]
+
+
 class BundleConfiguration(BaseModel):
-    entity: Literal["eagle", "dragonfly"]
+    entity: Entity
     modules: List[ModulesAvailable]
 
 
@@ -27,7 +30,7 @@ def pack_module(module: ModulesAvailable, configuration_files_path: Path):
     )
 
 
-def main(entity: Literal["dragonfly", "eagle"]):
+def package_given_entity(entity: Literal["dragonfly", "eagle"]):
     json_raw = Path(f"{entity}_configurations.json").read_text()
     model = BundleConfiguration(**json.loads(json_raw))
     configuration_files_path = Path("entities/") / model.entity
@@ -35,5 +38,16 @@ def main(entity: Literal["dragonfly", "eagle"]):
         pack_module(module, configuration_files_path / module.name)
 
 
+def is_valid_entity(entity: str) -> TypeGuard[Entity]:
+    return entity in ['eagle', 'dragonfly']
+
+
+def main():
+    import sys
+    entity = sys.argv[1]
+    assert is_valid_entity(entity), f"{entity} is not a valid entity."
+    package_given_entity(entity)
+
+
 if __name__ == "__main__":
-    main("dragonfly")
+    main()
