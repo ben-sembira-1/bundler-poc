@@ -4,6 +4,7 @@ from typing import Callable, List, Literal, TypeGuard
 
 from pydantic import BaseModel
 from modules import ModulesAvailable
+from modules.module_model import Module
 
 
 Entity = Literal["eagle", "dragonfly"]
@@ -24,19 +25,20 @@ def cli_stage_decoration(function: Callable):
 
 
 @cli_stage_decoration
-def pack_module(module: ModulesAvailable, configuration_files_path: Path):
-    print(f"Packing module {module.name} using {configuration_files_path}")
-    # assert (
-    #     module.all_dependencies_where_pulled
-    # ), "Not all given dependencies where pulled, check the bundle configuration file or the code."
+def pack_module(module: Module):
+    print(f"Packing module {module.name}")
+    print("===")
+    module.pack()
+    assert (
+        module.all_dependencies_where_pulled
+    ), "Not all given dependencies where pulled, check the bundle configuration file or the code."
 
 
 def package_given_entity(entity: Literal["dragonfly", "eagle"]):
     json_raw = Path(f"{entity}_configurations.json").read_text()
     model = BundleConfiguration(**json.loads(json_raw))
-    configuration_files_path = Path("entities/") / model.entity
     for module in model.modules:
-        pack_module(module, configuration_files_path / module.name)
+        pack_module(module)
 
 
 def is_valid_entity(entity: str) -> TypeGuard[Entity]:

@@ -1,7 +1,14 @@
 from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import Any, Iterable, Optional, Tuple
-from pydantic import BaseModel, HttpUrl, GetCoreSchemaHandler, PrivateAttr, field_validator, model_validator
+from pydantic import (
+    BaseModel,
+    HttpUrl,
+    GetCoreSchemaHandler,
+    PrivateAttr,
+    field_validator,
+    model_validator,
+)
 from pydantic_core import CoreSchema, core_schema
 
 
@@ -10,17 +17,11 @@ class SingleUrlDependency(BaseModel):
     hash: str
     _ever_pulled: bool = PrivateAttr(default=False)
 
-    def pull_to(self, target_directory: Path, target_file_name: Optional[str] = None):
-        if target_file_name is None:
-            if isinstance(self.url.path, str):
-                target_file_name = Path(self.url.path).name
-            else:
-                raise ValueError(f"Failed to generate file name, give a target file name please.")
-
-        target_path = target_directory / target_file_name
-        print(f"Pulling {self.url} to {target_path}...")  # TODO
+    def pull(self, target: Path):
+        print(f"---")
+        print(f"Fetching {self.url} to {target}")  # TODO
         self._ever_pulled = True
-        print(f"Validating hash of {target_path}...")  # TODO
+        print(f"Validating hash of {target}")  # TODO
 
     @property
     def ever_pulled(self) -> bool:
@@ -31,13 +32,10 @@ class SingleFileDependency(BaseModel):
     path: Path
     _ever_copied: bool = PrivateAttr(default=False)
 
-    def copy_to(self, target_directory: Path, target_file_name: Optional[str] = None):
+    def pull(self, target):
+        print(f"---")
+        print(f"Copying {self.path} to {target}")  # TODO
         self._ever_copied = True
-        target_file_name = (
-            self.path.name if target_file_name is None else target_file_name
-        )
-        target_path = target_directory / target_file_name
-        print(f"Copying {self} to {target_path}...")  # TODO
 
     @property
     def ever_copied(self) -> bool:
@@ -57,8 +55,8 @@ class UrlDependencies(BaseModel):
 class Module(BaseModel, ABC):
     name: str
 
-    # @abstractmethod
-    # def package_module(self) -> None: ...
+    @abstractmethod
+    def pack(self) -> None: ...
 
     @property
     def _all_urls_where_pulled(self) -> bool:
