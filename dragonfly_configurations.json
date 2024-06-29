@@ -1,7 +1,8 @@
 {
   "entity": "dragonfly",
-  "modules": {
-    "mission_planner": {
+  "modules": [
+    {
+      "name": "MissionPlanner",
       "dependencies": [
         {"url": "https://path/to/MissionPlanner-v1.3.74.msi", "target": "MIssionPlanner.msi", "hash": "df892"}
       ],
@@ -12,19 +13,23 @@
         "config_xml": "mission-planner/config.xml"
       }
     },
-    "neptune": {
+    {
+      "name": "Neptune",
       "dependencies": [
         {"url": "https://path/to/neptune-v2.4.5.tar", "target": "neptune.tar", "hash": "24eab"}
-      ]
+      ],
+      "configuration_files": null
     },
-    "logs_shortcuts": {
+    {
+      "name": "LogsShortcuts",
       "module": "logs-shortcut",
       "dependencies": [],
       "parameters": {
         "log_paths": [
           "C:\\AppData\\Neptune\\Insights"
         ]
-      }
+      },
+      "configuration_files": null
     }
-  }
+  ]
 }

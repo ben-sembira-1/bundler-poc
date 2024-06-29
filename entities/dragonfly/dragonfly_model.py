@@ -9,5 +9,5 @@ class DragonflyModules(BaseModel):
 
 
 class DragonflyConfiguration(BaseModel):
-    entity: Literal["eagle"]
+    entity: Literal["dragonfly"]
     modules: DragonflyModules
