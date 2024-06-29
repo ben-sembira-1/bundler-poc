@@ -4,7 +4,7 @@ from typing import Callable, List, Literal, TypeGuard
 
 from pydantic import BaseModel
 from modules import ModulesAvailable
-from modules.module_model import Module
+from modules.module import Module
 
 
 Entity = Literal["eagle", "dragonfly"]

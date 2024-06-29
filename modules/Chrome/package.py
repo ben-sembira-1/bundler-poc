@@ -1,6 +1,6 @@
 from pathlib import Path
 from pydantic import BaseModel, field_validator
-from modules.module_model import Module
+from modules.module import Module
 from modules.dependencies import (
     SingleFileDependency,
     SingleUrlDependency,

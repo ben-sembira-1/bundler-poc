@@ -1,5 +1,5 @@
 from pathlib import Path
-from modules.module_model import Module
+from modules.module import Module
 from modules.dependencies import SingleUrlDependency, UrlDependencies
 
 

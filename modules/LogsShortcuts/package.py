@@ -1,7 +1,7 @@
 from typing import List
 from pathlib import Path
 from pydantic import BaseModel
-from modules.module_model import Module
+from modules.module import Module
 
 
 class LogsShortcutsParameters(BaseModel):
