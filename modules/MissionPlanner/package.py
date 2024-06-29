@@ -1,7 +1,7 @@
 from pathlib import Path
 from pydantic import BaseModel
-from modules.module_model import (
-    Module,
+from modules.module_model import Module
+from modules.dependencies import (
     SingleFileDependency,
     SingleUrlDependency,
     UrlDependencies,

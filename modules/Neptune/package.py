@@ -1,6 +1,6 @@
 from pathlib import Path
-import shutil
-from modules.module_model import Module, SingleUrlDependency, UrlDependencies
+from modules.module_model import Module
+from modules.dependencies import SingleUrlDependency, UrlDependencies
 
 
 class NeptuneUrlDepenecies(UrlDependencies):
