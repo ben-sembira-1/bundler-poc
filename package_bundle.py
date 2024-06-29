@@ -16,22 +16,6 @@ class BundleConfiguration(BaseModel):
     modules: List[ModulesAvailable]
 
 
-def cli_stage_decoration(function: Callable):
-    def run_function_with_cli_decoration(*args, **kwargs):
-        print("\n----------------------")
-        function(*args, **kwargs)
-        print("----------------------")
-
-    return run_function_with_cli_decoration
-
-
-@cli_stage_decoration
-def pack_module(module: Module):
-    print(f"Packing module {module.name}")
-    print("===")
-    module.pack()
-
-
 def validate_all_dependencies_where_pulled(module: Module):
     LIST_ITEM_PREFIX = "\n  - "
     assert (
@@ -39,12 +23,22 @@ def validate_all_dependencies_where_pulled(module: Module):
     ), f"Not all {module.name} dependencies where pulled: [{''.join((LIST_ITEM_PREFIX + str(dep) for dep in module.dependencies_not_pulled))}\n]"
 
 
-def package_given_entity(entity: Literal["dragonfly", "eagle"]):
-    json_raw = Path(f"{entity}_configurations.json").read_text()
-    model = BundleConfiguration(**json.loads(json_raw))
-    for module in model.modules:
+def pack_module(module: Module):
+    print("\n----------------------")
+    module.pack()
+    validate_all_dependencies_where_pulled(module)
+    print("----------------------")
+
+
+def load_bundle_from_json(json_path: Path) -> BundleConfiguration:
+    json_raw = json_path.read_text()
+    return BundleConfiguration(**json.loads(json_raw))
+
+
+def pack_all(entity: Literal["dragonfly", "eagle"]):
+    bundle = load_bundle_from_json(Path(f"{entity}_configurations.json"))
+    for module in bundle.modules:
         pack_module(module)
-        validate_all_dependencies_where_pulled(module)
 
 
 def is_valid_entity(entity: str) -> TypeGuard[Entity]:
@@ -62,7 +56,7 @@ def main():
     entity = sys.argv[1]
     assert is_valid_entity(entity), f"{entity} is not a valid entity."
     SingletonConfigurationsFolder(path=Path(os.getcwd()) / "entities" / entity)
-    package_given_entity(entity)
+    pack_all(entity)
 
 
 if __name__ == "__main__":

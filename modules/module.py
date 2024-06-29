@@ -33,6 +33,8 @@ class Module(BaseModel, ABC):
             shutil.rmtree(self.dependencies_folder)
 
     def pack(self):
+        print(f"Packing module {self.name}")
+        print("===")
         self.clean_dependencies_folder()
         self.dependencies_folder.mkdir(parents=True)
         self._collect_all_dependencies(self.dependencies_folder)
