@@ -25,9 +25,10 @@ def cli_stage_decoration(function: Callable):
 
 @cli_stage_decoration
 def pack_module(module: ModulesAvailable, configuration_files_path: Path):
-    print(
-        f"Packing module {module.name} using {configuration_files_path}"
-    )
+    print(f"Packing module {module.name} using {configuration_files_path}")
+    # assert (
+    #     module.all_url_dependencies_where_pulled
+    # ), "Not all given dependencies where pulled, check the configuration file or the code"
 
 
 def package_given_entity(entity: Literal["dragonfly", "eagle"]):
@@ -39,11 +40,12 @@ def package_given_entity(entity: Literal["dragonfly", "eagle"]):
 
 
 def is_valid_entity(entity: str) -> TypeGuard[Entity]:
-    return entity in ['eagle', 'dragonfly']
+    return entity in ["eagle", "dragonfly"]
 
 
 def main():
     import sys
+
     entity = sys.argv[1]
     assert is_valid_entity(entity), f"{entity} is not a valid entity."
     package_given_entity(entity)

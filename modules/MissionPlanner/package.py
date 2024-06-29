@@ -1,14 +1,14 @@
 from pathlib import Path
-from modules.module_model import Module, UrlDependency
 from pydantic import BaseModel
+from modules.module_model import Module, SingleUrlDependency, UrlDependencies
 
 
 class MissionPlannerParameters(BaseModel):
     installation_path: Path
 
 
-class MissionPlannerUrlDependencies(BaseModel):
-    msi: UrlDependency
+class MissionPlannerUrlDependencies(UrlDependencies):
+    msi: SingleUrlDependency
 
 
 class MissionPlannerConfigurationFiles(BaseModel):

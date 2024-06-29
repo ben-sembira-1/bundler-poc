@@ -1,6 +1,6 @@
 from pathlib import Path
-from modules.module_model import Module, UrlDependency
 from pydantic import BaseModel
+from modules.module_model import Module, SingleUrlDependency, UrlDependencies
 
 
 class ChromeParameters(BaseModel):
@@ -8,9 +8,9 @@ class ChromeParameters(BaseModel):
     installation_path: Path
 
 
-class ChromeUrlDependencies(BaseModel):
-    installer_msi: UrlDependency
-    google_translate_addon: UrlDependency
+class ChromeUrlDependencies(UrlDependencies):
+    installer_msi: SingleUrlDependency
+    google_translate_addon: SingleUrlDependency
 
 
 class ChromeConfigurationFiles(BaseModel):

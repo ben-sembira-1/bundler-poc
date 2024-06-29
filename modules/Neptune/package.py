@@ -1,12 +1,13 @@
-from pydantic import BaseModel
-from modules.module_model import Module, UrlDependency
+from modules.module_model import Module, SingleUrlDependency, UrlDependencies
 
-class NeptuneUrlDepenecies(BaseModel):
-    installation_tar: UrlDependency
+
+class NeptuneUrlDepenecies(UrlDependencies):
+    installation_tar: SingleUrlDependency
+
 
 class Neptune(Module):
     configuration_files: None
     url_dependencies: NeptuneUrlDepenecies
 
     def package_module(self) -> None:
-        pass
+        print(f"Pulling {self.url_dependencies.installation_tar}...")
