@@ -10,4 +10,5 @@ class LogsShortcutsParameters(BaseModel):
 
 class LogsShortcuts(Module):
     parameters: LogsShortcutsParameters
+    url_dependencies: None
     configuration_files: None

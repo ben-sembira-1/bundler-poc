@@ -3,10 +3,10 @@
   "modules": [
     {
       "name": "Chrome",
-      "dependencies": [
-        {"url": "https://path/to/resource-v1.2.8.exe", "target": "resource.exe", "hash": "a193d"},
-        {"url": "https://path/to/other-resource-v3.4.1.msi", "target": "other-resource.msi", "hash": "11e32"}
-      ],
+      "url_dependencies": {
+        "installer_msi": {"url": "https://path/to/google-chrome-stable-v3.4.1.msi", "target": "google-chrome-stable.msi", "hash": "11e32"},
+        "google_translate_addon": {"url": "https://path/to/google-translate-v1.2.8.exe", "target": "google-translate.exe", "hash": "a193d"}
+      },
       "parameters": {
         "dark_mode": true,
         "installation_path": "C:\\Program Files (x86)\\Google Chrome"
@@ -18,9 +18,9 @@
     },
     {
       "name": "MissionPlanner",
-      "dependencies": [
-        {"url": "https://path/to/MissionPlanner-v1.3.74.msi", "target": "MIssionPlanner.msi", "hash": "df892"}
-      ],
+      "url_dependencies": {
+        "msi": {"url": "https://path/to/MissionPlanner-v1.3.74.msi", "hash": "df892"}
+      },
       "parameters": {
         "installation_path": "C:\\Program Files (x86)\\Mission Planner"
       },
@@ -31,7 +31,7 @@
     {
       "name": "LogsShortcuts",
       "module": "logs-shortcut",
-      "dependencies": [],
+      "url_dependencies": null,
       "parameters": {
         "log_paths": [
           "C:\\AppData\\Google Chrome\\Logs",

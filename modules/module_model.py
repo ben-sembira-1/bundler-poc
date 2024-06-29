@@ -1,17 +1,15 @@
 from pathlib import Path
-from typing import Any, List
+from typing import Any
 from pydantic import BaseModel, field_validator, model_validator
 
 
-class Dependency(BaseModel):
+class UrlDependency(BaseModel):
     url: Path
-    target: str
     hash: str
 
 
 class Module(BaseModel):
     name: str
-    dependencies: List[Dependency]
 
     @field_validator("name")
     @classmethod
@@ -25,12 +23,13 @@ class Module(BaseModel):
 
     @model_validator(mode="before")
     @classmethod
-    def subclass_defined_configuration_files(cls, data: Any) -> Any:
-        REQUIRED_FIELD_NAME = "configuration_files"
+    def subclass_defined_requierd_fields(cls, data: Any) -> Any:
+        required_fields = ['configuration_files', 'url_dependencies']
         assert issubclass(
             cls, Module
         ), f"Shoud never get to here, internal pydantic error or missunderstanding the way pydantic works"
-        assert (
-            REQUIRED_FIELD_NAME in cls.model_fields
-        ), f"Model {cls} should define the '{REQUIRED_FIELD_NAME}' field"
+        for field in required_fields:
+            assert (
+                field in cls.model_fields
+            ), f"Model {cls} should define the '{field}' field"
         return data

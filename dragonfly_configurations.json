@@ -3,9 +3,9 @@
   "modules": [
     {
       "name": "MissionPlanner",
-      "dependencies": [
-        {"url": "https://path/to/MissionPlanner-v1.3.74.msi", "target": "MIssionPlanner.msi", "hash": "df892"}
-      ],
+      "url_dependencies": {
+        "msi": {"url": "https://path/to/MissionPlanner-v1.3.74.msi", "hash": "df892"}
+      },
       "parameters": {
         "installation_path": "C:\\Program Files (x86)\\Mission Planner"
       },
@@ -15,15 +15,15 @@
     },
     {
       "name": "Neptune",
-      "dependencies": [
-        {"url": "https://path/to/neptune-v2.4.5.tar", "target": "neptune.tar", "hash": "24eab"}
-      ],
+      "url_dependencies": {
+        "installation_tar": {"url": "https://path/to/neptune-v2.4.5.tar", "hash": "24eab"}
+      },
       "configuration_files": null
     },
     {
       "name": "LogsShortcuts",
       "module": "logs-shortcut",
-      "dependencies": [],
+      "url_dependencies": null,
       "parameters": {
         "log_paths": [
           "C:\\AppData\\Neptune\\Insights"
