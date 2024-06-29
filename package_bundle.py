@@ -3,7 +3,7 @@ import json
 from typing import Callable, List, Literal
 
 from pydantic import BaseModel
-from modules.models import ModulesAvailable
+from modules import ModulesAvailable
 
 
 class BundleConfiguration(BaseModel):

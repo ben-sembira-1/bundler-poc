@@ -1,6 +1,6 @@
 from typing import Literal
 from pydantic import BaseModel
-from modules.models import Chrome, MissionPlanner, LogsShortcuts
+from modules.module_model import Chrome, MissionPlanner, LogsShortcuts
 
 class EagleModules(BaseModel):
     chrome: Chrome

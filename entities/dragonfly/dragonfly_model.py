@@ -1,6 +1,6 @@
 from typing import Literal
 from pydantic import BaseModel
-from modules.models import MissionPlanner, Neptune, LogsShortcuts
+from modules.module_model import MissionPlanner, Neptune, LogsShortcuts
 
 class DragonflyModules(BaseModel):
     mission_planner: MissionPlanner
