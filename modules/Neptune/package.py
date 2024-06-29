@@ -7,21 +7,15 @@ class NeptuneUrlDepenecies(UrlDependencies):
     installation_tar: SingleUrlDependency
 
 
-MODULE_DEPS_FOLDER = Path(__file__).parent / "deps"
-
-
 class Dependencies:
-    INSTALLATION_TAR = MODULE_DEPS_FOLDER / "neptune_installation.tar"
+    INSTALLATION_TAR = "neptune_installation.tar"
 
 
 class Neptune(Module):
     configuration_files: None
     url_dependencies: NeptuneUrlDepenecies
 
-    def pack(self) -> None:
-        if MODULE_DEPS_FOLDER.exists():
-            shutil.rmtree(MODULE_DEPS_FOLDER)
-        MODULE_DEPS_FOLDER.mkdir(parents=True)
+    def _collect_all_dependencies(self, dependecies_folder: Path) -> None:
         self.url_dependencies.installation_tar.pull(
-            target=Dependencies.INSTALLATION_TAR
+            target=dependecies_folder / Dependencies.INSTALLATION_TAR
         )

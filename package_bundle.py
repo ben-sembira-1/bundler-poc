@@ -29,9 +29,13 @@ def pack_module(module: Module):
     print(f"Packing module {module.name}")
     print("===")
     module.pack()
+
+
+def validate_all_dependencies_where_pulled(module: Module):
+    LIST_ITEM_PREFIX = "\n  - "
     assert (
-        module.all_dependencies_where_pulled
-    ), "Not all given dependencies where pulled, check the bundle configuration file or the code."
+        len(module.dependencies_not_pulled) == 0
+    ), f"Not all {module.name} dependencies where pulled: [{''.join((LIST_ITEM_PREFIX + str(dep) for dep in module.dependencies_not_pulled))}\n]"
 
 
 def package_given_entity(entity: Literal["dragonfly", "eagle"]):
@@ -39,6 +43,7 @@ def package_given_entity(entity: Literal["dragonfly", "eagle"]):
     model = BundleConfiguration(**json.loads(json_raw))
     for module in model.modules:
         pack_module(module)
+        validate_all_dependencies_where_pulled(module)
 
 
 def is_valid_entity(entity: str) -> TypeGuard[Entity]:

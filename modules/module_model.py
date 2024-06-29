@@ -1,6 +1,8 @@
+import shutil
+import sys
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import Any, Iterable, Optional, Tuple
+from typing import Any, Iterable, List, Optional, Tuple, Union
 from pydantic import (
     BaseModel,
     HttpUrl,
@@ -56,29 +58,53 @@ class Module(BaseModel, ABC):
     name: str
 
     @abstractmethod
-    def pack(self) -> None: ...
+    def _collect_all_dependencies(self, dependencies_folder: Path) -> None: ...
 
     @property
-    def _all_urls_where_pulled(self) -> bool:
+    def subclass_path(self) -> Path:
+        subclass__file__ = sys.modules[self.__module__].__file__
+        assert isinstance(subclass__file__, str)
+        return Path(subclass__file__).parent
+
+    @property
+    def dependecies_folder(self) -> Path:
+        return self.subclass_path / ".deps"
+
+    def clean_dependencies_folder(self) -> None:
+        if self.dependecies_folder.exists():
+            print(f"~ Removing {self.dependecies_folder}")
+            shutil.rmtree(self.dependecies_folder)
+
+    def pack(self):
+        self.clean_dependencies_folder()
+        self.dependecies_folder.mkdir(parents=True)
+        self._collect_all_dependencies(self.dependecies_folder)
+
+    @property
+    def _urls_not_pulled(self) -> List[SingleUrlDependency]:
         self.url_dependencies: Optional[
             Iterable[Tuple[str, SingleUrlDependency]]
         ]  # We know that because of the validator at the bottom
         if self.url_dependencies is None:
-            return True
-        return all(dep.ever_pulled for _, dep in self.url_dependencies)
+            return []
+        return [dep for _, dep in self.url_dependencies if not dep.ever_pulled]
 
     @property
-    def _all_configs_where_copied(self) -> bool:
+    def _configs_not_copied(self) -> List[SingleFileDependency]:
         self.configuration_files: Optional[
             Iterable[Tuple[str, SingleFileDependency]]
         ]  # We know that because of the validator at the bottom
         if self.configuration_files is None:
-            return True
-        return all(config.ever_copied for _, config in self.configuration_files)
+            return []
+        return [
+            config for _, config in self.configuration_files if not config.ever_copied
+        ]
 
     @property
-    def all_dependencies_where_pulled(self) -> bool:
-        return self._all_urls_where_pulled and self._all_configs_where_copied
+    def dependencies_not_pulled(
+        self,
+    ) -> List[Union[SingleUrlDependency, SingleFileDependency]]:
+        return self._urls_not_pulled + self._configs_not_copied
 
     @field_validator("name")
     @classmethod

@@ -13,5 +13,5 @@ class LogsShortcuts(Module):
     url_dependencies: None
     configuration_files: None
 
-    def pack(self):
+    def _collect_all_dependencies(self, dependencies_folder: Path) -> None:
         pass

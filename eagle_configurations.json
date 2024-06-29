@@ -5,7 +5,7 @@
       "name": "Chrome",
       "url_dependencies": {
         "installer_msi": {"url": "https://path/to/google-chrome-stable-v3.4.1.msi", "hash": "11e32"},
-        "google_translate_addon": {"url": "https://path/to/google-translate-v1.2.8.exe", "hash": "a193d"}
+        "translate_addon": {"url": "https://path/to/google-translate-v1.2.8.exe", "hash": "a193d"}
       },
       "parameters": {
         "dark_mode": true,
@@ -31,13 +31,13 @@
     {
       "name": "LogsShortcuts",
       "module": "logs-shortcut",
-      "url_dependencies": null,
       "parameters": {
         "log_paths": [
           "C:\\AppData\\Google Chrome\\Logs",
           "C:\\AppData\\Google Chrome\\Experimental\\Light Rendering\\Logs"
         ]
       },
+      "url_dependencies": null,
       "configuration_files": null
     }
   ]
