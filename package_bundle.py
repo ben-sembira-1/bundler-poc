@@ -4,6 +4,7 @@ from typing import Callable, List, Literal, TypeGuard
 
 from pydantic import BaseModel
 from modules import ModulesAvailable
+from modules.dependencies import SingletonConfigurationsFolder
 from modules.module import Module
 
 
@@ -51,10 +52,16 @@ def is_valid_entity(entity: str) -> TypeGuard[Entity]:
 
 
 def main():
+    import os
     import sys
+
+    assert (
+        Path(os.getcwd()) == Path(__file__).parent
+    ), "Please run the script from the folder it is located in."
 
     entity = sys.argv[1]
     assert is_valid_entity(entity), f"{entity} is not a valid entity."
+    SingletonConfigurationsFolder(path=Path(os.getcwd()) / "entities" / entity)
     package_given_entity(entity)
 
 

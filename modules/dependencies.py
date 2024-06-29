@@ -1,11 +1,36 @@
+import os
 from pathlib import Path
+import shutil
 from typing import Any
 from pydantic import (
     BaseModel,
+    Field,
     HttpUrl,
     PrivateAttr,
     field_validator,
 )
+
+
+class Singleton(type):
+    _instances = {}
+
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls._instances:
+            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
+        return cls._instances[cls]
+
+
+class SingletonConfigurationsFolder(metaclass=Singleton):
+    def __init__(self, path: Path):
+        self._path: Path = path
+
+    @staticmethod
+    def instance():
+        return SingletonConfigurationsFolder()
+
+    @property
+    def path(self) -> Path:
+        return self._path
 
 
 class SingleUrlDependency(BaseModel):
@@ -26,11 +51,14 @@ class SingleUrlDependency(BaseModel):
 
 class SingleFileDependency(BaseModel):
     path: Path
+    _configurations_folder: Path
     _ever_copied: bool = PrivateAttr(default=False)
 
-    def pull(self, target):
+    def pull(self, target: Path):
         print(f"---")
-        print(f"Copying {self.path} to {target}")  # TODO
+        full_src_path = SingletonConfigurationsFolder.instance().path / self.path
+        print(f"Copying {full_src_path} to {target}")
+        shutil.copyfile(full_src_path, target)
         self._ever_copied = True
 
     @property
