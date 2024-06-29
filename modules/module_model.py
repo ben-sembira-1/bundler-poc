@@ -24,18 +24,18 @@ class Module(BaseModel, ABC):
         return Path(subclass__file__).parent
 
     @property
-    def dependecies_folder(self) -> Path:
+    def dependencies_folder(self) -> Path:
         return self.subclass_path / ".deps"
 
     def clean_dependencies_folder(self) -> None:
-        if self.dependecies_folder.exists():
-            print(f"~ Removing {self.dependecies_folder}")
-            shutil.rmtree(self.dependecies_folder)
+        if self.dependencies_folder.exists():
+            print(f"~ Removing {self.dependencies_folder}")
+            shutil.rmtree(self.dependencies_folder)
 
     def pack(self):
         self.clean_dependencies_folder()
-        self.dependecies_folder.mkdir(parents=True)
-        self._collect_all_dependencies(self.dependecies_folder)
+        self.dependencies_folder.mkdir(parents=True)
+        self._collect_all_dependencies(self.dependencies_folder)
 
     @property
     def _urls_not_pulled(self) -> List[SingleUrlDependency]:
@@ -69,17 +69,17 @@ class Module(BaseModel, ABC):
         currently_validated_module_name = cls.__name__
         assert name == currently_validated_module_name, (
             f"\n\nCould not find module named '{name}'.\n"
-            ">>> IMPORTANT: If you recieved this error you can ignore other pydantic errors.\n\n"
+            ">>> IMPORTANT: If you received this error you can ignore other pydantic errors.\n\n"
         )
         return name
 
     @model_validator(mode="before")
     @classmethod
-    def subclass_defined_requierd_fields(cls, data: Any) -> Any:
+    def subclass_defined_required_fields(cls, data: Any) -> Any:
         required_fields = ["configuration_files", "url_dependencies"]
         assert issubclass(
             cls, Module
-        ), f"Shoud never get to here, internal pydantic error or missunderstanding the way pydantic works"
+        ), f"Should never get to here, internal pydantic error or misunderstanding the way pydantic works"
         for field in required_fields:
             assert (
                 field in cls.model_fields

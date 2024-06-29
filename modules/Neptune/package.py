@@ -3,7 +3,7 @@ from modules.module_model import Module
 from modules.dependencies import SingleUrlDependency, UrlDependencies
 
 
-class NeptuneUrlDepenecies(UrlDependencies):
+class NeptuneUrlDependencies(UrlDependencies):
     installation_tar: SingleUrlDependency
 
 
@@ -13,9 +13,9 @@ class Dependencies:
 
 class Neptune(Module):
     configuration_files: None
-    url_dependencies: NeptuneUrlDepenecies
+    url_dependencies: NeptuneUrlDependencies
 
-    def _collect_all_dependencies(self, dependecies_folder: Path) -> None:
+    def _collect_all_dependencies(self, dependencies_folder: Path) -> None:
         self.url_dependencies.installation_tar.pull(
-            target=dependecies_folder / Dependencies.INSTALLATION_TAR
+            target=dependencies_folder / Dependencies.INSTALLATION_TAR
         )

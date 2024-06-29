@@ -30,10 +30,10 @@ class MissionPlanner(Module):
     url_dependencies: MissionPlannerUrlDependencies
     configuration_files: MissionPlannerConfigurationFiles
 
-    def _collect_all_dependencies(self, dependecies_folder: Path) -> None:
+    def _collect_all_dependencies(self, dependencies_folder: Path) -> None:
         self.url_dependencies.msi.pull(
-            target=dependecies_folder / Dependencies.MISSION_PLANNER_MSI
+            target=dependencies_folder / Dependencies.MISSION_PLANNER_MSI
         )
         self.configuration_files.config_xml.pull(
-            target=dependecies_folder / Dependencies.CONFIG_XML
+            target=dependencies_folder / Dependencies.CONFIG_XML
         )

@@ -26,7 +26,7 @@ class ChromeConfigurationFiles(BaseModel):
     def validate_jpeg(cls, background_image: SingleFileDependency) -> SingleFileDependency:
         assert background_image.path.name.endswith(".jpeg"), (
             f"Expecting a jpeg, got {background_image.path.name},"
-            " if you want to change it, make sure to change in the dependecies map too"
+            " if you want to change it, make sure to change in the dependencies map too"
         )
         return background_image
 
@@ -43,16 +43,16 @@ class Chrome(Module):
     url_dependencies: ChromeUrlDependencies
     configuration_files: ChromeConfigurationFiles
 
-    def _collect_all_dependencies(self, dependecies_folder: Path) -> None:
+    def _collect_all_dependencies(self, dependencies_folder: Path) -> None:
         self.url_dependencies.installer_msi.pull(
-            dependecies_folder / Dependencies.INSTALLER_MSI
+            dependencies_folder / Dependencies.INSTALLER_MSI
         )
         self.url_dependencies.translate_addon.pull(
-            dependecies_folder / Dependencies.TRANSLATE_ADDON
+            dependencies_folder / Dependencies.TRANSLATE_ADDON
         )
         self.configuration_files.auto_tabs.pull(
-            dependecies_folder / Dependencies.AUTO_TABS
+            dependencies_folder / Dependencies.AUTO_TABS
         )
         self.configuration_files.background_image.pull(
-            dependecies_folder / Dependencies.BACKGROUND_JPEG
+            dependencies_folder / Dependencies.BACKGROUND_JPEG
         )
