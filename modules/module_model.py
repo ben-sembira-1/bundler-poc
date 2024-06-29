@@ -1,26 +1,47 @@
 from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import Any, Iterable, Optional, Tuple
-from pydantic import BaseModel, PrivateAttr, field_validator, model_validator
+from pydantic import BaseModel, HttpUrl, GetCoreSchemaHandler, PrivateAttr, field_validator, model_validator
+from pydantic_core import CoreSchema, core_schema
 
 
 class SingleUrlDependency(BaseModel):
-    url: Path
+    url: HttpUrl
     hash: str
     _ever_pulled: bool = PrivateAttr(default=False)
 
-    def pull(self, target_directory: Path, target_file_name: Optional[str] = None):
-        self._ever_pulled = True
-        target_file_name = (
-            self.url.name if target_file_name is None else target_file_name
-        )
+    def pull_to(self, target_directory: Path, target_file_name: Optional[str] = None):
+        if target_file_name is None:
+            if isinstance(self.url.path, str):
+                target_file_name = Path(self.url.path).name
+            else:
+                raise ValueError(f"Failed to generate file name, give a target file name please.")
+
         target_path = target_directory / target_file_name
         print(f"Pulling {self.url} to {target_path}...")  # TODO
+        self._ever_pulled = True
         print(f"Validating hash of {target_path}...")  # TODO
 
     @property
     def ever_pulled(self) -> bool:
         return self._ever_pulled
+
+
+class SingleFileDependency(BaseModel):
+    path: Path
+    _ever_copied: bool = PrivateAttr(default=False)
+
+    def copy_to(self, target_directory: Path, target_file_name: Optional[str] = None):
+        self._ever_copied = True
+        target_file_name = (
+            self.path.name if target_file_name is None else target_file_name
+        )
+        target_path = target_directory / target_file_name
+        print(f"Copying {self} to {target_path}...")  # TODO
+
+    @property
+    def ever_copied(self) -> bool:
+        return self._ever_copied
 
 
 class UrlDependencies(BaseModel):
@@ -40,11 +61,26 @@ class Module(BaseModel, ABC):
     # def package_module(self) -> None: ...
 
     @property
-    def all_url_dependencies_where_pulled(self) -> bool:
-        self.url_dependencies: Iterable[Tuple[str, SingleUrlDependency]]  # We now that because of the validator at the bottom
-        return all(
-            dep.ever_pulled for _, dep in self.url_dependencies
-        )
+    def _all_urls_where_pulled(self) -> bool:
+        self.url_dependencies: Optional[
+            Iterable[Tuple[str, SingleUrlDependency]]
+        ]  # We know that because of the validator at the bottom
+        if self.url_dependencies is None:
+            return True
+        return all(dep.ever_pulled for _, dep in self.url_dependencies)
+
+    @property
+    def _all_configs_where_copied(self) -> bool:
+        self.configuration_files: Optional[
+            Iterable[Tuple[str, SingleFileDependency]]
+        ]  # We know that because of the validator at the bottom
+        if self.configuration_files is None:
+            return True
+        return all(config.ever_copied for _, config in self.configuration_files)
+
+    @property
+    def all_dependencies_where_pulled(self) -> bool:
+        return self._all_urls_where_pulled and self._all_configs_where_copied
 
     @field_validator("name")
     @classmethod

@@ -1,6 +1,6 @@
 from pathlib import Path
 from pydantic import BaseModel
-from modules.module_model import Module, SingleUrlDependency, UrlDependencies
+from modules.module_model import Module, SingleFileDependency, SingleUrlDependency, UrlDependencies
 
 
 class MissionPlannerParameters(BaseModel):
@@ -12,7 +12,7 @@ class MissionPlannerUrlDependencies(UrlDependencies):
 
 
 class MissionPlannerConfigurationFiles(BaseModel):
-    config_xml: Path
+    config_xml: SingleFileDependency
 
 
 class MissionPlanner(Module):

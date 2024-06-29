@@ -27,8 +27,8 @@ def cli_stage_decoration(function: Callable):
 def pack_module(module: ModulesAvailable, configuration_files_path: Path):
     print(f"Packing module {module.name} using {configuration_files_path}")
     # assert (
-    #     module.all_url_dependencies_where_pulled
-    # ), "Not all given dependencies where pulled, check the configuration file or the code"
+    #     module.all_dependencies_where_pulled
+    # ), "Not all given dependencies where pulled, check the bundle configuration file or the code."
 
 
 def package_given_entity(entity: Literal["dragonfly", "eagle"]):

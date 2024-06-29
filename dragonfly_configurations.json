@@ -10,7 +10,7 @@
         "installation_path": "C:\\Program Files (x86)\\Mission Planner"
       },
       "configuration_files": {
-        "config_xml": "mission-planner/config.xml"
+        "config_xml": {"path": "mission-planner/config.xml"}
       }
     },
     {
@@ -23,12 +23,12 @@
     {
       "name": "LogsShortcuts",
       "module": "logs-shortcut",
-      "url_dependencies": null,
       "parameters": {
         "log_paths": [
           "C:\\AppData\\Neptune\\Insights"
         ]
       },
+      "url_dependencies": null,
       "configuration_files": null
     }
   ]

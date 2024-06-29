@@ -1,6 +1,6 @@
 from pathlib import Path
 from pydantic import BaseModel
-from modules.module_model import Module, SingleUrlDependency, UrlDependencies
+from modules.module_model import Module, SingleFileDependency, SingleUrlDependency, UrlDependencies
 
 
 class ChromeParameters(BaseModel):
@@ -14,8 +14,8 @@ class ChromeUrlDependencies(UrlDependencies):
 
 
 class ChromeConfigurationFiles(BaseModel):
-    background_image: Path
-    auto_tabs: Path
+    background_image: SingleFileDependency
+    auto_tabs: SingleFileDependency
 
 
 class Chrome(Module):

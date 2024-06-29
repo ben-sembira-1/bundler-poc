@@ -12,8 +12,8 @@
         "installation_path": "C:\\Program Files (x86)\\Google Chrome"
       },
       "configuration_files": {
-        "background_image": "chrome/background.jpeg",
-        "auto_tabs": "chrome/auto-tabs.yaml"
+        "background_image": {"path": "chrome/background.jpeg"},
+        "auto_tabs": {"path": "chrome/auto-tabs.yaml"}
       }
     },
     {
@@ -25,7 +25,7 @@
         "installation_path": "C:\\Program Files (x86)\\Mission Planner"
       },
       "configuration_files": {
-        "config_xml": "mission-planner/config.xml"
+        "config_xml": {"path": "mission-planner/config.xml"}
       }
     },
     {
