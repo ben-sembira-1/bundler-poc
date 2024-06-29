@@ -1,7 +1,8 @@
 {
   "entity": "eagle",
-  "modules": {
-    "chrome": {
+  "modules": [
+    {
+      "name": "Chrome",
       "dependencies": [
         {"url": "https://path/to/resource-v1.2.8.exe", "target": "resource.exe", "hash": "a193d"},
         {"url": "https://path/to/other-resource-v3.4.1.msi", "target": "other-resource.msi", "hash": "11e32"}
@@ -15,7 +16,8 @@
         "auto_tabs": "chrome/auto-tabs.yaml"
       }
     },
-    "mission_planner": {
+    {
+      "name": "MissionPlanner",
       "dependencies": [
         {"url": "https://path/to/MissionPlanner-v1.3.74.msi", "target": "MIssionPlanner.msi", "hash": "df892"}
       ],
@@ -26,7 +28,8 @@
         "config_xml": "mission-planner/config.xml"
       }
     },
-    "logs_shortcuts": {
+    {
+      "name": "LogsShortcuts",
       "module": "logs-shortcut",
       "dependencies": [],
       "parameters": {
@@ -37,5 +40,5 @@
       },
       "configuration_files": null
     }
-  }
+  ]
 }
