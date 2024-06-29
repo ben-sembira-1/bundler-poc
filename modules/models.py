@@ -1,6 +1,6 @@
 from pathlib import Path
-from typing import Any, List, Literal, Union
-from pydantic import BaseModel, model_validator, PydanticUserError
+from typing import List, Union
+from pydantic import BaseModel, field_validator
 
 
 class Dependency(BaseModel):
@@ -10,22 +10,18 @@ class Dependency(BaseModel):
 
 
 class Module(BaseModel):
+    name: str
     dependencies: List[Dependency]
     configuration_files: None
 
-    @model_validator(mode="before")
+    @field_validator('name')
     @classmethod
-    def subclass_defined_name(cls, data: Any) -> dict:
-        assert issubclass(
-            cls, Module
-        ), f"Shoud never get to here, internal pydantic error or missunderstanding the way pydantic works"
-        assert 'name' in cls.model_fields, f"Model {cls} should define the 'name' field"
-        return data
-
-
-# import json
-# c = Module(**json.loads("lsdjfk"))
-# c.fi
+    def name_matches_classname(cls, name: str) -> str:
+        currently_validated_module_name = cls.__name__
+        assert (
+            name == currently_validated_module_name
+        ), f"Could not find module named '{name}'. If you recieved this error you can ignore other pydantic errors."
+        return name
 
 
 class Chrome(Module):
@@ -37,7 +33,6 @@ class Chrome(Module):
         background_image: Path
         auto_tabs: Path
 
-    name: Literal['Chrome']
     parameters: Parameters
     configuration_files: ConfigurationFiles
 
@@ -49,20 +44,18 @@ class MissionPlanner(Module):
     class ConfigurationFiles(BaseModel):
         config_xml: Path
 
-    name: Literal["MissionPlanner"]
     parameters: Parameters
     configuration_files: ConfigurationFiles
 
 
 class Neptune(Module):
-    name: Literal["Neptune"]
+    pass
 
 
 class LogsShortcuts(Module):
     class Parameters(BaseModel):
         log_paths: List[Path]
 
-    name: Literal["LogsShortcuts"]
     parameters: Parameters
 
 
