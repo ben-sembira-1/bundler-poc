@@ -1,9 +1,9 @@
 from pathlib import Path
 import json
-from typing import Callable, List, Literal, TypeGuard
+from typing import Union, Literal, TypeGuard
 
 from pydantic import BaseModel
-from modules import ModulesAvailable
+from modules import Chrome, MissionPlanner, LogsShortcuts, Neptune
 from modules.dependencies import SingletonConfigurationsFolder
 from modules.module import Module
 
@@ -11,9 +11,21 @@ from modules.module import Module
 Entity = Literal["eagle", "dragonfly"]
 
 
+class EagleModules(BaseModel):
+  chrome: Chrome
+  mission_planner: MissionPlanner
+  logs_shortcuts: LogsShortcuts
+
+
+class DragonflyModules(BaseModel):
+  neptune: Neptune
+  mission_planner: MissionPlanner
+  logs_shortcuts: LogsShortcuts
+
+
 class BundleConfiguration(BaseModel):
     entity: Entity
-    modules: List[ModulesAvailable]
+    modules: Union[EagleModules, DragonflyModules]
 
 
 def validate_all_dependencies_where_pulled(module: Module):
@@ -37,7 +49,7 @@ def load_bundle_from_json(json_path: Path) -> BundleConfiguration:
 
 def pack_all(entity: Literal["dragonfly", "eagle"]):
     bundle = load_bundle_from_json(Path(f"{entity}_configurations.json"))
-    for module in bundle.modules:
+    for _, module in bundle.modules:
         pack_module(module)
 
 

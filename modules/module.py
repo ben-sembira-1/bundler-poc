@@ -12,8 +12,10 @@ from modules.dependencies import SingleFileDependency, SingleUrlDependency
 
 
 class Module(BaseModel, ABC):
-    name: str
-
+    @property
+    def name(self) -> str:
+        return self.__class__.__name__
+    
     @abstractmethod
     def _collect_all_dependencies(self, dependencies_folder: Path) -> None: ...
 
@@ -64,16 +66,6 @@ class Module(BaseModel, ABC):
         self,
     ) -> List[Union[SingleUrlDependency, SingleFileDependency]]:
         return self._urls_not_pulled + self._configs_not_copied
-
-    @field_validator("name")
-    @classmethod
-    def match_name_to_classname(cls, name: str) -> str:
-        currently_validated_module_name = cls.__name__
-        assert name == currently_validated_module_name, (
-            f"\n\nCould not find module named '{name}'.\n"
-            ">>> IMPORTANT: If you received this error you can ignore other pydantic errors.\n\n"
-        )
-        return name
 
     @model_validator(mode="before")
     @classmethod
