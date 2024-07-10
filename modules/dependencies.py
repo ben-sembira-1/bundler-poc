@@ -1,7 +1,7 @@
-import os
+import hashlib
 from pathlib import Path
 import shutil
-from typing import Any
+from typing import Any, Optional
 from pydantic import (
     BaseModel,
     Field,
@@ -33,6 +33,10 @@ class SingletonConfigurationsFolder(metaclass=Singleton):
         return self._path
 
 
+def sha1(file_path: Path) -> str:
+    return hashlib.sha1(file_path.read_bytes()).hexdigest()
+
+
 class SingleUrlDependency(BaseModel):
     url: HttpUrl
     hash: str
@@ -51,6 +55,7 @@ class SingleUrlDependency(BaseModel):
 
 class SingleFileDependency(BaseModel):
     path: Path
+    hash: Optional[str] = None
     _configurations_folder: Path
     _ever_copied: bool = PrivateAttr(default=False)
 
@@ -60,6 +65,11 @@ class SingleFileDependency(BaseModel):
         print(f"Copying {full_src_path} to {target}")
         shutil.copyfile(full_src_path, target)
         self._ever_copied = True
+        if self.hash is not None:
+            assert sha1(target).startswith(self.hash), (
+                f"Hash of {target.as_posix()} starts with {sha1(target)[:len(self.hash)]} "
+                f"but {self.hash} is specified in the configuration file."
+            )
 
     @property
     def ever_copied(self) -> bool:
