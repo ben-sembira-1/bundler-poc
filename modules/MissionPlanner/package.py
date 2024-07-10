@@ -37,3 +37,4 @@ class MissionPlanner(Module):
         self.configuration_files.config_xml.pull(
             target=dependencies_folder / Dependencies.CONFIG_XML
         )
+        print(f"---\n{self.parameters=}")

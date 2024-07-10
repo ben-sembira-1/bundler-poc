@@ -56,3 +56,5 @@ class Chrome(Module):
         self.configuration_files.background_image.pull(
             dependencies_folder / Dependencies.BACKGROUND_JPEG
         )
+        print(f"---\n{self.parameters=}")
+

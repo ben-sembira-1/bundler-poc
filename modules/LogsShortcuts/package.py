@@ -14,4 +14,5 @@ class LogsShortcuts(Module):
     configuration_files: None
 
     def _collect_all_dependencies(self, dependencies_folder: Path) -> None:
-        pass
+        print(f"---\n{self.parameters=}")
+
